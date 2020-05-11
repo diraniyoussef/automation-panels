@@ -1,14 +1,19 @@
 package com.youssefdirani.automation;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
+
+import androidx.annotation.ColorInt;
 
 class CommunicateWithServer {
     //This class has 2 tasks: 1) to listen to any incoming messages from server and update the switches accordingly.
@@ -328,7 +333,7 @@ class CommunicateWithServer {
             mob = incomingMessage.substring( first_colon + 1, next_colon );
 
             return owner.equalsIgnoreCase(owner_part) && mob.equalsIgnoreCase(mob_part) &&
-                    mod.equalsIgnoreCase(String.valueOf(parentSocketConnection.selectedServerConfig.getPanelIndex()));
+                    mod.equalsIgnoreCase( panel_index );
         }
 
         @Override
@@ -401,10 +406,72 @@ class CommunicateWithServer {
         }
 
         private boolean isRelayReport( int dataIndex ) {
+            final int NUMBER_OF_POINTS = 2;
+            final String[] outPin = {"3", "4"};
 
-
-
-
+            String outputState;
+            int specificDataIndex;
+            for (int i = 0; i < NUMBER_OF_POINTS; i++) {
+                String textToSearch = "O" + outPin[i];
+                specificDataIndex = incomingMessage.indexOf(textToSearch, dataIndex);
+                if (specificDataIndex != -1) {
+                    outputState = Character.toString(incomingMessage.charAt(specificDataIndex + textToSearch.length()));
+                    final int viewIndex = i;
+                    if (outputState.equals("T")) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                final ViewGroup parentOfAllButtons  = activity.findViewById(R.id.panel_control);
+                                final TextView statusTextView = parentOfAllButtons.findViewWithTag( "textView" + outPin[viewIndex] );
+                                statusTextView.setText("On");
+                                statusTextView.setTextColor(Color.GREEN);
+                                /*
+                                Log.i("Youssef Communi...java", "output " + outPin[viewIndex] +
+                                        " is set to true. For panel index " + panel_index +
+                                        " on port " + parentSocketConnection.selectedServerConfig.getPortFromIndex(parentSocketConnection.active_client_index) );
+                                 */
+                            }
+                        });
+                        toasting.toast("Current state is received from panel  " +
+                                panel_name + ".", Toast.LENGTH_SHORT, false);
+                        receivedResponse = true;
+                        Log.i("Youssef Communi...java", "receivedResponse is set to true at output " +
+                                outPin[viewIndex]
+                                + ", for panel index " + panel_index +
+                                " on port " + parentSocketConnection.selectedServerConfig.getPortFromIndex(parentSocketConnection.active_client_index));
+                    } else if (outputState.equals("F")) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                final ViewGroup parentOfAllButtons  = activity.findViewById(R.id.panel_control);
+                                final TextView statusTextView = parentOfAllButtons.findViewWithTag( "textView" + outPin[viewIndex] );
+                                statusTextView.setText("Off");
+                                statusTextView.setTextColor(Color.RED);
+                                /*         Log.i("Youssef Communi...java", "something did change to False at output " +
+                                        outPin[viewIndex]
+                                        + ". For panel index " + panel_index +
+                                        " on port " + parentSocketConnection.selectedServerConfig.getPortFromIndex(parentSocketConnection.active_client_index));
+                        */
+                            }
+                        });
+                        toasting.toast("Current state is received from panel " +
+                                panel_name + ".", Toast.LENGTH_SHORT, false);
+                        //Generic.toasting.toast("Current state is received.", Toast.LENGTH_SHORT, silentToastAfterNewSocket);
+                        //silentToastAfterNewSocket = false;
+                        receivedResponse = true;
+                        Log.i("Youssef Communi...java", "receivedResponse is set to true at output pin " +
+                                outPin[viewIndex]
+                                + ". For panel index " + panel_index +
+                                " on port " + parentSocketConnection.selectedServerConfig.getPortFromIndex(parentSocketConnection.active_client_index));
+                    } else {
+                        //Generic.toast(this_is_not_UI_thread, "Couldn't get information correctly from module.", Toast.LENGTH_SHORT, silentToast);
+                        Log.i("Youssef Communi...java", "Couldn't get information correctly from module after not " +
+                                "being true nor false, for panel index " + panel_index +
+                                " on port " + parentSocketConnection.selectedServerConfig.getPortFromIndex(parentSocketConnection.active_client_index));
+                    }
+                } else {
+                    Log.i("Youssef Communi...java", "wrong format. place ***");
+                    return false;
+                }
+            }
             return false;
         }
 
