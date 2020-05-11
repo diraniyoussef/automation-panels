@@ -26,7 +26,7 @@
                 android:linksClickable="true"
                 android:text="Description To User"
                 android:textColorLink="@android:color/holo_blue_light"
-                android:textSize="19sp" />
+                android:textSize="18sp" />
 
             <ImageButton
                 android:id="@+id/button_backToWelcomeFromDescription"

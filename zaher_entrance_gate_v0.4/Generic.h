@@ -7,10 +7,10 @@ const byte AP_setup_pin = 0; /*It's D0*/
 extern boolean main_oper_vars_need_to_be_reset;
 
 const int In_Pins_Number = 2;
-const char in_pin[ In_Pins_Number ] = { '5' , '6' };
+const char in_pin[ In_Pins_Number ] = { '3' , '4' };
 
 const int Out_Pins_Number = 2;
-const char out_pin[ Out_Pins_Number ] = { '3' , '4' }; //Please consider the order of out_pin in coherence with the order of in_pin. I.e. the order is a mapping.
+const char out_pin[ Out_Pins_Number ] = { '5' , '6' }; //Please consider the order of out_pin in coherence with the order of in_pin. I.e. the order is a mapping.
 
 boolean in_pin_state[ In_Pins_Number ]; 
 boolean an_in_pin_changed;
@@ -186,7 +186,7 @@ public:
         boolPinState = false;
       }
       Serial.printf("Reading %c%c from EEPROM during encoding\n", pinChar, pinState);
-      if ( ! General::arrayIncludeElement( out_pin_symbol , out_pins_number , pinChar ) || !( pinState == 'F' || pinState == 'T' ) ) {
+      if ( General::arrayIncludeElement( out_pin_symbol , out_pins_number , pinChar ) == -1 || !( pinState == 'F' || pinState == 'T' ) ) {
       //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
       
         //Whenever what I read in the EEEPROM is not valid, I make sure to free up to the REST of the EEPROM and then leave.
@@ -230,7 +230,7 @@ public:
   }
 
   boolean updatePinAndEEPROM( char symbol, boolean bool_state ) {    
-    if( General::arrayIncludeElement( out_pin_symbol , out_pins_number , symbol ) ) { 
+    if( General::arrayIncludeElement( out_pin_symbol , out_pins_number , symbol ) != -1 ) { 
     //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
       char state;
       if( bool_state ) {
@@ -340,27 +340,18 @@ private:
     digitalWrite( getRealPinFromD( resetting_pin ), HIGH ); //at this point it start HW resetting.
   }
 
-  static const boolean out_as_considered = true; //true means ON is HIGH
-  static boolean getOutPinStateAsConsidered( int D_pin ) {
-    if( !out_as_considered ) {
-      return ( !digitalRead( NodeMCU::getRealPinFromD( D_pin ) ) );
-    } else {
-      return ( digitalRead( NodeMCU::getRealPinFromD( D_pin ) ) ); /*the existence of "!" next to digitalRead is in parallel with that of 
-      * setOutPinStateAsConsidered
-      */
-    }
-  }
+  static const boolean out_as_considered = false; //true means ON is HIGH
   
 public:
   static void setPins() {
-    pinMode(D5, INPUT);    
-    pinMode(D6, INPUT);
+    pinMode(D3, INPUT);    
+    pinMode(D4, INPUT);
     //pinMode(D10, INPUT);
     //pinMode(D0, INPUT);      
     pinMode( getRealPinFromD( AP_setup_pin ) , INPUT );   
     
-    pinMode(D3, OUTPUT); //only for the sake of good restart  //this will be a LED that is controlled by the received report from the obeying panel.
-    pinMode(D4, OUTPUT); //only for the sake of good restart  //this will be a LED that is controlled by the received report from the obeying panel.    
+    pinMode(D5, OUTPUT); //only for the sake of good restart  //this will be a LED that is controlled by the received report from the obeying panel.
+    pinMode(D6, OUTPUT); //only for the sake of good restart  //this will be a LED that is controlled by the received report from the obeying panel.    
     //pinMode(D9, OUTPUT); 
     //pinMode(D10, OUTPUT);       
     pinMode( getRealPinFromD( connect_failure_notifier_pin ) , OUTPUT );   
@@ -419,12 +410,28 @@ public:
     return ( !digitalRead( NodeMCU::getRealPinFromD( D_pin ) ) );
   }
 
+  static boolean getOutPinStateAsConsidered( int D_pin ) {   
+    boolean asRead = digitalRead( NodeMCU::getRealPinFromD( D_pin ) );
+    Serial.printf("inside getOutPinStateAsConsidered. D_pin is %d and its asRead value is %d\n", D_pin, asRead);
+    if( !out_as_considered ) {
+      Serial.printf("inside getOutPinStateAsConsidered. D_pin is %d and its considered value is %d\n", D_pin, !asRead);
+      return ( !asRead );
+    } else {
+      Serial.printf("inside getOutPinStateAsConsidered. D_pin is %d and its considered value is %d\n", D_pin, asRead);
+      return ( asRead ); /*the existence of "!" next to digitalRead is in parallel with that of 
+      * setOutPinStateAsConsidered
+      */
+    }
+  }
+
   static void setOutPinStateAsConsidered( int D_pin , boolean state_bool ) {/*This is in accordance with PCB design.
     * These are used with the out pin D3 and D4. 
      */
+    Serial.printf("inside setOutPinStateAsConsidered. D_pin is %d and its state_bool is %d\n", D_pin, state_bool);
     if( !out_as_considered ) {
       state_bool = !state_bool;
     } 
+    Serial.printf("inside setOutPinStateAsConsidered. D_pin is %d and its state_bool is %d\n", D_pin, state_bool);
     digitalWrite( NodeMCU::getRealPinFromD( D_pin ), state_bool ); /*this is the only change to make... Usually !state_bool is the 
     * preferred change in terms of PCB design*/
   }

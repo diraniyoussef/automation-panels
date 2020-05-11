@@ -147,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     //public MutableLiveData<String> localNotInternet = new MutableLiveData<>(); //this is to propagate the value to the fragment
-    public String owner_part = "zaher's house";
+    public String owner_part = "zaher_house";
     //String mob_part = "S7_Edge";
     //String mob_part = "S4";
-    public String mob_part = "mob1"; //usr2 is kept in the store
+    public String mob_part = "mob3"; //usr2 is kept in the store
     //String mob_part = "Mom_Tab";
     public String mob_Id = owner_part + ":" + mob_part + ":";
 

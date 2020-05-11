@@ -2,8 +2,8 @@
     <string name="app_name">Dirani Automation</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Intelligent App</string>
-    <string name="nav_header_subtitle">seek for more</string>
+    <string name="nav_header_title">Simple Home Automation</string>
+    <string name="nav_header_subtitle">A gift to dear Zaher</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="about_app">حول التطبيق</string>
     <string name="network_configuration">Network Configuration</string>

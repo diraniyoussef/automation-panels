@@ -407,7 +407,7 @@ class CommunicateWithServer {
 
         private boolean isRelayReport( int dataIndex ) {
             final int NUMBER_OF_POINTS = 2;
-            final String[] outPin = {"3", "4"};
+            final String[] outPin = {"5", "6"};
 
             String outputState;
             int specificDataIndex;
@@ -482,7 +482,7 @@ class CommunicateWithServer {
             for( int i = 0 ; i < number_of_data_chunks - 1 ; i++ ) { //it's 2, the first for humidity, tailed with 1 or more trailors, followed by the temperature, tailed with 1 or more null chars (which probably won't appear)
                 int specificDataIndex = incomingMessage.indexOf( textToSearch, dataIndex );
                 if (specificDataIndex == -1) {
-                    Log.i("Youssef Comm", "wrong format");
+                    Log.i("Youssef Comm", "wrong format. As humidity temperature. Position 1.");
                     return false;
                 } else {
                     humidity_str = incomingMessage.substring(dataIndex, specificDataIndex);
@@ -494,7 +494,7 @@ class CommunicateWithServer {
                 int specificDataIndex = incomingMessage.lastIndexOf( textToSearch );
                 Log.i("Communi...java", "Youssef last trailor is found at " + specificDataIndex);
                 if (specificDataIndex == -1) {
-                    Log.i("Youssef Communi", "wrong format");
+                    Log.i("Youssef Communi", "wrong format. As humidity temperature. Position 2.");
                     return false;
                 } else {
                     final String temperature_str = incomingMessage.substring( specificDataIndex + 1);
@@ -515,7 +515,7 @@ class CommunicateWithServer {
                         });
                     }
                     receivedResponse = true;
-                    toasting.toast("Current Temperature and humidity state is received from " +
+                    toasting.toast("Current state is received from " +
                             panel_name + ".", Toast.LENGTH_SHORT, false);
                     return true;
                 }

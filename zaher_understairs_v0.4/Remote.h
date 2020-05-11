@@ -5,7 +5,7 @@ TempHum tempHum;
 //it makes sense to define here the remote IP for both classes RemoteServer and InformEntity because they both use the same connection.
 AsynchroClient remote_connection; //intermediate relay server
 
-const char* owner_id_buff = "zaher's house:\0";
+const char* owner_id_buff = "zaher_house:\0";
 const char* mod_id_buff = "understairs_panel:\0"; //please select fine values
 const char* Panel_Type = "2O"; //either "2I", "2O", or "TempHum"
 
@@ -14,9 +14,9 @@ private:
   //the dummy part
   static constexpr char* dummy_buff = "dummy:\0";
 
-  static const int mob_Number = 2; //Don't forget to add "dummy" in the intermediate server.
+  static const int mob_Number = 5; //Don't forget to add "dummy" in the intermediate server.
   //const char* mob_i_Id_buff[ mob_Number ] = { dummy_buff, "S4:\0", "TrekStor_Tab:\0", "S7_Edge:\0"};
-  const char* mob_i_Id_buff[ mob_Number ] = { dummy_buff, "mob1:\0" };
+  const char* mob_i_Id_buff[ mob_Number ] = { dummy_buff, "mob1:\0", "mob2:\0", "mob3:\0", "mob4:\0" };
   //const char* mob_i_Id_buff[ mob_Number ] = { dummy_buff }; //"dummy" thing: If I were to use dummy at all (because ...), and if I were to make sure it is connected to the intermediate relay server, then I would be using the ack mechanism, and the incoming ack will have "dummy" in its signature, then I will have to have "dummy" in mob_i_Id_buff array.
                                                                             // I won't use dummy here I'm using InformRemoteAPI which takes care of the connection reliability through its mechanism. (BUT THAT WASN'T ENOUGH SINCE WE NEED TO REGISTER AT THE INTERMEDIATE AT THE SOCKET SWITCH)
                                                                             // For the same reason I won't be sending Hi to intermediate because InformRemoteAPI takes care of connection reliablity through sending messages and receiving replies back (NOT AT SWITCHING TIME), and by these sent messages, this panel registers itself in the intermediate server.
@@ -126,13 +126,11 @@ public:
         is_intelligible_message_context = true;        
         the_request.pin = '\0'; 
         return (true);             
-      } else if( strcmp(Panel_Type, "2O") ) {
+      } else if( strcmp(Panel_Type, "2O") == 0 ) {
         if (read_char_number - 1 >= lastColonOfIncomingMessage + 4){
           if( reading_buff[ lastColonOfIncomingMessage + 1 ] == 'O' ) {
-            if ( General::arrayIncludeElement( out_pin , sizeof(out_pin) , reading_buff[lastColonOfIncomingMessage + 2] ) 
-            //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
-            
-              //|| General::arrayIncludeElement( PCF1.out_pin_symbol , PCF1.out_pins_number , reading_buff[lastColonOfIncomingMessage + 2] ) //comment for PCF exclusion
+            if ( General::arrayIncludeElement( out_pin , sizeof(out_pin) , reading_buff[lastColonOfIncomingMessage + 2] ) != -1           
+              //|| General::arrayIncludeElement( PCF1.out_pin_symbol , PCF1.out_pins_number , reading_buff[lastColonOfIncomingMessage + 2] ) != -1 //comment for PCF exclusion
             ) {
               if ( reading_buff[lastColonOfIncomingMessage + 3] == 'T' || reading_buff[lastColonOfIncomingMessage + 3] == 'F' ) {
                 boolean actionType;
@@ -182,14 +180,16 @@ public:
   }
 
   void updatePinAndEEPROM() { //it is bad to enter this method if the pcf was not connected.
+    Serial.println("updatePinAndEEPROM in Remote");
     char symbol = the_request.pin;
     boolean state_bool = the_request.action;
-    if( General::arrayIncludeElement( out_pin , sizeof(out_pin) , symbol ) ) {
-    //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
-    
-      digitalWrite( NodeMCU::getRealPinFromD( General::getIntFromHexChar( symbol ) ), state_bool );
+    if( General::arrayIncludeElement( out_pin , sizeof(out_pin) , symbol ) != -1 ) {
+      Serial.println("pin is acceptable !!!");
+      NodeMCU::setOutPinStateAsConsidered( General::getIntFromHexChar( symbol ) , state_bool );
       NodeMCU::encodeEEPROM( symbol , state_bool );
-    }     
+    } else {
+      Serial.println("pin is not acceptable. why ???");
+    }
     //else if( ! PCF1.updatePinAndEEPROM( symbol, state_bool ) ) {  //the return value of updatePinAndEEPROM method of PCF is just to know if the pin belongs to that particular PCF or not. //comment for PCF exclusion
       
     //  if( ! PCF2->updatePinAndEEPROM( symbol, state_bool ) ) {
@@ -285,17 +285,18 @@ public:
   }
   
   static int addPinsToReport( char* totalMessage_buff, int last_length ) {
-    int pins_to_report_about = sizeof( in_pin );
+    int pins_to_report_about = sizeof( out_pin );
     for( int i = 0 ; i < pins_to_report_about ; i++ ) {
       totalMessage_buff[ last_length ] = 'O';
       char stateOfPin;
-      int pinAsInt = General::getIntFromHexChar( in_pin[i] );
-      if( NodeMCU::getInPinStateAsConsidered( pinAsInt ) ) { //NodeMCU::getRealPinFromD(i) is the same as saying Di as of D1 or D2 or ...
+      int pinAsInt = General::getIntFromHexChar( out_pin[i] );
+      Serial.println("pin is read in Remote");
+      if( NodeMCU::getOutPinStateAsConsidered( pinAsInt ) ) { //NodeMCU::getRealPinFromD(i) is the same as saying Di as of D1 or D2 or ...
         stateOfPin = 'T';                       
       } else {
         stateOfPin = 'F';
       }
-      totalMessage_buff[ last_length + 1 ] = in_pin[i];
+      totalMessage_buff[ last_length + 1 ] = out_pin[i];
       totalMessage_buff[ last_length + 2 ] = stateOfPin;
       last_length = last_length + 3;      
     }
@@ -324,16 +325,21 @@ public:
   static void sendReport( AsyncClient* newest_async_client, const char* destination_id_buff ) {    
     NodeMCU::yieldAndDelay(); //I think this delay may be useful...
     int last_length = strlen( (const char*) owner_id_buff ) + strlen( (const char*) mod_id_buff ) + strlen( (const char*) destination_id_buff );  //strlen still works fine with destination_id_buff  
-    //char* totalMessage_buff = new char[ last_length + 3 * PCF::absolute_max_pins_number + 2 ]; //the + 2 is the '\\' and the '\0'
-    //Serial.printf("Allocated size to totalMessage_buff is %d\n", last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 1  + 1);
-    char* totalMessage_buff = new char[ last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 2 ]; //the + 2 is the '\\' and the '\0'
+    
+    char* totalMessage_buff;
+    if( strcmp( Panel_Type, "TempHum" ) == 0 ) {
+      totalMessage_buff = new char[ last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 2 ]; //the + 2 is the '\\' and the '\0'
+      //Serial.printf("Allocated size to totalMessage_buff is %d\n", last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 1  + 1);
+    } else {
+      totalMessage_buff = new char[ last_length + 3 * PCF::absolute_max_pins_number + 2 ]; //the + 2 is the '\\' and the '\0'      
+    }
     strcpy( totalMessage_buff, (const char*) owner_id_buff );
     strcat( totalMessage_buff, (const char*) mod_id_buff );
     strcat( totalMessage_buff, (const char*) destination_id_buff );       
     
-    if( strcmp( Panel_Type, "TempHum" ) ) {
+    if( strcmp( Panel_Type, "TempHum" ) == 0 ) {
       last_length = RemoteServerMessageOp::addTempAndHumToReport( totalMessage_buff, last_length );
-    } else { //meaning if( strcmp(Panel_Type, "2O") )
+    } else { //meaning if( strcmp(Panel_Type, "2O") == 0 )
       last_length = addPinsToReport( totalMessage_buff, last_length );
     }
 
@@ -353,12 +359,14 @@ public:
         if( *is_ack_hi_received ) { //if has been set in analyze(..) call then it's an ack of HI.
           return;
         }
-        if( strcmp(Panel_Type, "2O") ) {
+        if( strcmp( Panel_Type, "2O" ) == 0 ) {
           if( !isJustReport() ) {
+            NodeMCU::yieldAndDelay();
             updatePinAndEEPROM();
+            NodeMCU::yieldAndDelay(50); //maybe necessary because I got a weird unreliable behavior... Anyway.
           }
         }
-      //The following will be commented if this panel won't get any report requests from any mobile app.    
+      //The following will be commented if this panel won't get any report requests from any mobile app.         
         if( remote_connection.async_client_2.connected() ) {
           Serial.printf("async_client_2 of IP %s is connected, so sending a report through it\n", remote_connection.IP );
           sendReport( &remote_connection.async_client_2 );
@@ -443,10 +451,8 @@ private:
           //Serial.printf("Analyzing, 'O' is fine\n");
           int pin_index = General::arrayIncludeElement( (char*) in_pin , In_Pins_Number , read_buff[ test_index + 2 ] );
           /*
-          if ( General::arrayIncludeElement( (char*) in_pin , In_Pins_Number , read_buff[ test_index + 2 ] ) 
-          //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
-          
-            //|| General::arrayIncludeElement( PCF1.out_pin_symbol , PCF1.out_pins_number , read_buff[ last_colon_of_incoming_message + 2 ] ) //comment for PCF exclusion
+          if ( General::arrayIncludeElement( (char*) in_pin , In_Pins_Number , read_buff[ test_index + 2 ] ) != -1          
+            //|| General::arrayIncludeElement( PCF1.out_pin_symbol , PCF1.out_pins_number , read_buff[ last_colon_of_incoming_message + 2 ] ) != -1 //comment for PCF exclusion
             ) {
           */
           if( pin_index != -1 ) {
@@ -827,8 +833,8 @@ public:
     //remote_connection.setAsynchroClient( "173.243.120.250" , 11360 , 11359 );
     //findRemoteServerIP(); //this is to evaluate remote_server_IP    
     //remote_connection.setAsynchroClient( (char*) remote_server_IP , 11360 , 11359 );    
-//    remote_connection.setAsynchroClient( "74.122.199.173" , 11359 , 11360 );    
-    remote_connection.setAsynchroClient( "192.168.1.21" , 11359 , 11360 );    
+    remote_connection.setAsynchroClient( "74.122.199.173" , 11359 , 11360 );    
+//    remote_connection.setAsynchroClient( "192.168.0.21" , 11359 , 11360 );
     remote_server_message_op.setup( );
     this->isInformRemote = isInformRemote;
     

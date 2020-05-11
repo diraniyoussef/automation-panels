@@ -128,10 +128,10 @@ public class UnderstairsFragment extends Fragment { //in principle, this fragmen
                 //The try catch block is necessary since Integer.parseInt to an empty string makes a fatal error
             }
             String[] internetIntermediateIP_portion = new String[4];
-            internetIntermediateIP_portion[0] = network_prefs.getString( internetIP_key[0], "192" );
-            internetIntermediateIP_portion[1] = network_prefs.getString( internetIP_key[1], "168" );
-            internetIntermediateIP_portion[2] = network_prefs.getString( internetIP_key[2], "1" );
-            internetIntermediateIP_portion[3] = network_prefs.getString( internetIP_key[3], "21" );
+            internetIntermediateIP_portion[0] = network_prefs.getString( internetIP_key[0], "74" );
+            internetIntermediateIP_portion[1] = network_prefs.getString( internetIP_key[1], "122" );
+            internetIntermediateIP_portion[2] = network_prefs.getString( internetIP_key[2], "199" );
+            internetIntermediateIP_portion[3] = network_prefs.getString( internetIP_key[3], "173" );
             /*Now, although it is weird to write the values just being read, but this is necessary for more consistency in the code.
             In particular, since we enter here before we enter ConfigPanel class, then the default value of the network preferences
             there is worthless, and this is the point. The goal is to have there the same initial values mentioned here. Automatically.

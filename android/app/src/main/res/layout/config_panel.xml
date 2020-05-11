@@ -166,7 +166,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
                             android:gravity="center"
-                            android:inputType="textVisiblePassword"
+                            android:inputType="textPassword"
                             android:maxLength="64"
                             android:nextFocusDown="@id/Config_editText_staticIP0"
                             android:tag="password"

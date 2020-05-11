@@ -5,8 +5,8 @@ private:
   //by the way another module belonging to the same owner can have its own set of mobiles.
   //const char* owner_id_buff = "Youssef_70853721:\0";
   //const char* mod_id_buff = "4:\0";
-  static const int local_server_mob_Number = 2;
-  const char* local_server_mob_i_Id_buff[ local_server_mob_Number ] = { "mob1:\0", "Guest_mob:\0"}; //e.g.(mob_Id_buff + 2)[4] will the 'M' ???  
+  static const int local_server_mob_Number = 4;
+  const char* local_server_mob_i_Id_buff[ local_server_mob_Number ] = { "mob1:\0", "mob2:\0", "mob3:\0", "mob4:\0"}; //e.g.(mob_Id_buff + 2)[4] will the 'M' ???  
 
   char reading_buff[ Max_Reading_Buffer ];
   int readCharNumber;
@@ -53,16 +53,14 @@ private:
         Serial.println("local incoming message is really an 'R?'");
         return (true);
       
-      } else if( strcmp(Panel_Type, "2O") ) {
+      } else if( strcmp(Panel_Type, "2O") == 0 ) {
                 
         //typically it's like mob1:O1T?
         if (readCharNumber - 1 >= lastColonOfIncomingMessage + 4){
           if (reading_buff[lastColonOfIncomingMessage + 1] == 'O'){
             //now making sure the incoming message indicates the pin clearly
-            if ( General::arrayIncludeElement( out_pin , sizeof(out_pin) , reading_buff[lastColonOfIncomingMessage + 2] ) 
-            //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
-            
-              //|| General::arrayIncludeElement( PCF1.out_pin_symbol , PCF1.out_pins_number , reading_buff[ lastColonOfIncomingMessage + 2 ] ) //comment for PCF exclusion
+            if ( General::arrayIncludeElement( out_pin , sizeof(out_pin) , reading_buff[lastColonOfIncomingMessage + 2] ) != -1            
+              //|| General::arrayIncludeElement( PCF1.out_pin_symbol , PCF1.out_pins_number , reading_buff[ lastColonOfIncomingMessage + 2 ] ) != -1 //comment for PCF exclusion
             ) {
               if ( reading_buff[lastColonOfIncomingMessage + 3] == 'T' || reading_buff[lastColonOfIncomingMessage + 3] == 'F' ) {
                 boolean actionType;
@@ -106,13 +104,11 @@ private:
   void updatePinAndEEPROM() { //it is bad to enter this method if the pcf was not connected.
     char symbol = the_request.pin;
     boolean state_bool = the_request.action;
-    if( General::arrayIncludeElement( out_pin , sizeof(out_pin) , symbol ) ) {
-    //PLEASE BEWARE THAT I MADE A CHANGE ABOUT THE RETURN VALUE OF arrayIncludeElement
-    
-      digitalWrite( NodeMCU::getRealPinFromD( General::getIntFromHexChar( symbol ) ), state_bool );
-
+    if( General::arrayIncludeElement( out_pin , sizeof(out_pin) , symbol ) != -1 ) {
+      Serial.println("pin is updated in LocalServer");
+      NodeMCU::setOutPinStateAsConsidered( General::getIntFromHexChar( symbol ) , state_bool );
       NodeMCU::encodeEEPROM( symbol , state_bool );
-    } 
+    }
     //else if( ! PCF1.updatePinAndEEPROM( symbol , state_bool ) ) {  //the return value of updatePinAndEEPROM method of PCF is just to know if the pin belongs to that particular PCF or not. //comment for PCF exclusion
     //  if( ! PCF2->updatePinAndEEPROM( symbol, state_bool ) ) {
     //    ...
@@ -151,16 +147,21 @@ public:
   void sendReport() { //Inside this method we take care of the case if the pcf was not connected.
     NodeMCU::yieldAndDelay(); //I think this delay may be useful...
     int last_length = strlen( (const char*) owner_id_buff ) + strlen( (const char*) mod_id_buff ) + strlen( (const char*) mob_id_buff );
-    //char* totalMessage_buff = new char[ last_length + 3 * PCF::absolute_max_pins_number + 1 ];
-    Serial.printf("Allocated size to totalMessage_buff is %d\n", last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 1 );
-    char* totalMessage_buff = new char[ last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 1 ];
+       
+    char* totalMessage_buff;
+    if( strcmp( Panel_Type, "TempHum" ) == 0 ) {
+      totalMessage_buff = new char[ last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 1 ];
+      Serial.printf("Allocated size to totalMessage_buff is %d\n", last_length + TempHum::Humidity_Int_Size + 1 + TempHum::Temperature_Float_Size + 1 );
+    } else {
+      totalMessage_buff = new char[ last_length + 3 * PCF::absolute_max_pins_number + 1 ];
+    }
     strcpy( totalMessage_buff, (const char*) owner_id_buff );
     strcat( totalMessage_buff, (const char*) mod_id_buff );
-    strcat( totalMessage_buff, (const char*) mob_id_buff );       
+    strcat( totalMessage_buff, (const char*) mob_id_buff );
 
-    if( strcmp( Panel_Type, "TempHum" ) ) {
+    if( strcmp( Panel_Type, "TempHum" ) == 0 ) {
       last_length = RemoteServerMessageOp::addTempAndHumToReport( totalMessage_buff, last_length );
-    } else { //meaning if( strcmp(Panel_Type, "2O") )
+    } else { //meaning if( strcmp(Panel_Type, "2O") == 0 )
       last_length = RemoteServerMessageOp::addPinsToReport( totalMessage_buff, last_length ); //nothing is special about RemoteServerMessageOp, it's just the addPinsToReport    
     }
        
@@ -185,7 +186,8 @@ public:
   void processMessage() {
     sendAck();
     if( analyze() ) {
-      if( strcmp(Panel_Type, "2O") ) {
+      Serial.printf("analyze() in LocalServer is right. \n" );
+      if( strcmp(Panel_Type, "2O") == 0 ) {
         if (!isJustReport()) {
           NodeMCU::yieldAndDelay(); //take a breath between two successive writings
           updatePinAndEEPROM();
@@ -193,6 +195,8 @@ public:
       }
       NodeMCU::yieldAndDelay();
       sendReport();
+    } else {
+      Serial.printf("analyze() in LocalServer is not right. \n" );
     }
   }
   
@@ -222,7 +226,7 @@ public:
 
 class LocalServer {
 private:
-  static const int Max_Concurrent_Clients = 3;
+  static const int Max_Concurrent_Clients = 4;
   static const int Local_Server_Number = 2; //This will remain 2 in my convention. Never changed
   LocalIncomingClient client_[ Max_Concurrent_Clients ][ Local_Server_Number ];
   WiFiServer server[Local_Server_Number] = {

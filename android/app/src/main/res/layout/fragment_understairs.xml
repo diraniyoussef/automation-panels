@@ -46,11 +46,11 @@
 
                     <Button
                         android:id="@+id/button0"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="26dp"
                         android:gravity="center"
-                        android:tag="3"
+                        android:tag="5"
                         android:text="Place 1" />
 
                     <TextView
@@ -60,7 +60,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="26dp"
-                        android:tag="textView3"
+                        android:tag="textView5"
                         android:text="Off" />
 
                 </RelativeLayout>
@@ -72,11 +72,11 @@
 
                     <Button
                         android:id="@+id/button1"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="26dp"
                         android:gravity="center"
-                        android:tag="4"
+                        android:tag="6"
                         android:text="Place 2" />
 
                     <TextView
@@ -86,7 +86,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="26dp"
-                        android:tag="textView4"
+                        android:tag="textView6"
                         android:text="Off" />
 
                 </RelativeLayout>
