@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Config_ConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:focusedByDefault="true">
+
+    <LinearLayout
+        android:id="@+id/Config_warnUser_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="false"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/Config_warnUser_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Rectifying User Input" />
+
+        <Button
+            android:id="@+id/Config_warnUser_buttonOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="false"
+            android:layout_marginTop="10dp"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="true"
+            android:text="OK" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/Config_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:focusable="false"
+                    android:background="@drawable/border"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/Config_button_overviewExplanation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center"
+                        android:text="+ Show Overview Explanation" />
+
+                    <LinearLayout
+                        android:id="@+id/Config_LinearLayout_overviewExplanation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+
+                        android:focusable="false"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/Config_textView_userGuide_overviewExplanation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Guide text to user"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/border"
+                    android:focusable="false"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/Config_textView_userGuide_router"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Guide text to user"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:focusable="false"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Router SSID*"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_SSID"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="32"
+                            android:tag="ssid"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:focusable="false"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="WIFI Password"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_Password"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:inputType="textVisiblePassword"
+                            android:maxLength="64"
+                            android:nextFocusDown="@id/Config_editText_staticIP0"
+                            android:tag="password"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/Config_textView_userGuide_staticAllocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Another guide to user"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Static IP"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_staticIP0"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_staticIP1"
+                            android:tag="staticIP0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_staticIP1"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_staticIP2"
+                            android:tag="staticIP1"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_staticIP2"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_staticIP3"
+                            android:tag="staticIP2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_staticIP3"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_gatewayIP0"
+                            android:tag="staticIP3"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Gateway IP"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_gatewayIP0"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_gatewayIP1"
+                            android:tag="gatewayIP0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_gatewayIP1"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_gatewayIP2"
+                            android:tag="gatewayIP1"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_gatewayIP2"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_gatewayIP3"
+                            android:tag="gatewayIP2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_gatewayIP3"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_subnet0"
+                            android:tag="gatewayIP3"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Subnet"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_subnet0"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_subnet1"
+                            android:tag="subnet0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_subnet1"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_subnet2"
+                            android:tag="subnet1"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_subnet2"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_subnet3"
+                            android:tag="subnet2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_subnet3"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:nextFocusDown="@id/Config_editText_MAC0"
+                            android:tag="subnet3"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="MAC Address"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_MAC0"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="2"
+                            android:nextFocusDown="@id/Config_editText_MAC1"
+                            android:tag="mac0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_MAC1"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="2"
+                            android:nextFocusDown="@id/Config_editText_MAC2"
+                            android:tag="mac1"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_MAC2"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="2"
+                            android:nextFocusDown="@id/Config_editText_MAC3"
+                            android:tag="mac2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_MAC3"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="2"
+                            android:nextFocusDown="@id/Config_editText_MAC4"
+                            android:tag="mac3"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_MAC4"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="2"
+                            android:nextFocusDown="@id/Config_editText_MAC5"
+                            android:tag="mac4"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/Config_editText_MAC5"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:maxLength="2"
+                            android:tag="mac5"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Config_Panel_Admin_Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/border"
+                    android:focusable="false"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/Config_button_AdminExpansion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center"
+                        android:text="+ Extra Section (admin)" />
+
+                    <LinearLayout
+                        android:id="@+id/Config_LinearLayout_AdminTexts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="15dp"
+                        android:focusable="false"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/Config_textView_userGuide_Admin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Guide text to user"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Local Port 1"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_localPort1"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:nextFocusDown="@id/Config_editText_localPort2"
+                                android:tag="localPort1"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Local Port 2"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_localPort2"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:nextFocusDown="@id/Config_editText_internetPort1"
+                                android:tag="localPort2"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Internet Port 1"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_internetPort1"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:nextFocusDown="@id/Config_editText_internetPort2"
+                                android:tag="internetPort1"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Internet Port 2"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_internetPort2"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:nextFocusDown="@id/Config_editText_internetIP0"
+                                android:tag="internetPort2"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="60dp"
+                                android:gravity="center"
+                                android:text="Internet Intermediate IP"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_internetIP0"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:layout_gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_internetIP1"
+                                android:tag="internetIP0"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_internetIP1"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_internetIP2"
+                                android:tag="internetIP1"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_internetIP2"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:tag="internetIP2"
+                                android:nextFocusDown="@id/Config_editText_internetIP3"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_internetIP3"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:tag="internetIP3"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Config_Panel_Informing_Local_Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/border"
+                    android:focusable="false"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/Config_button_obeyingIPsExpansion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center"
+                        android:text="+ This is a local informing panel ?" />
+
+                    <LinearLayout
+                        android:id="@+id/Config_LinearLayout_obeyingIPsTexts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="15dp"
+
+                        android:focusable="false"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/Config_textView_userGuide_obeyingIPs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Guide text to user"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Reflector 1 - Static IP"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey0IP0"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginStart="2dp"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey0IP1"
+                                android:tag="obey0IP0"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey0IP1"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey0IP2"
+                                android:tag="obey0IP1"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey0IP2"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey0IP3"
+                                android:tag="obey0IP2"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey0IP3"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey1IP0"
+                                android:tag="obey0IP3"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Reflector 2 - Static IP"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey1IP0"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginStart="2dp"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey1IP1"
+                                android:tag="obey1IP0"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey1IP1"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey1IP2"
+                                android:tag="obey1IP1"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey1IP2"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_obey1IP3"
+                                android:tag="obey1IP2"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/Config_editText_obey1IP3"
+                                android:layout_width="35dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:nextFocusDown="@id/Config_editText_SSID"
+                                android:tag="obey1IP3"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Config_Panel_UnmemorizeInMob_Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/border"
+                    android:focusable="false"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/Config_textView_userGuide_UnmemorizeInMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Guide text to user"
+                        android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:focusable="false"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/checkBox_unmemorizeInMobile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:buttonTint="#37000000"
+                            android:text="unrelate mobile to panel"
+                            android:textColor="@android:color/secondary_text_light"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Config_Panel_LocalOrInternet_Section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/border"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/Config_textView_userGuide_localOrInternet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Guide text to user"
+                        android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/checkBox_local"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:focusable="true"
+                            android:checked="true"
+                            app:buttonTint="#37000000"
+                            android:tag="checkbox local"
+                            android:text="Local Network"
+                            android:textColor="@android:color/secondary_text_light"
+                            android:textSize="14sp" />
+                        <CheckBox
+                            android:id="@+id/checkBox_internet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:focusable="true"
+                            android:checked="true"
+                            app:buttonTint="#37000000"
+                            android:tag="checkbox internet"
+                            android:text="Internet"
+                            android:textColor="@android:color/secondary_text_light"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/Config_Set_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:text="Set" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/button_backToMainFromConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:srcCompat="?android:attr/actionModeCloseDrawable"
+                tools:layout_editor_absoluteX="4dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
