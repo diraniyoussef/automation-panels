@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     public String owner_part = "zaher_house";
     //String mob_part = "S7_Edge";
     //String mob_part = "S4";
-    public String mob_part = "mob3"; //usr2 is kept in the store
+    public String mob_part = "mob1"; //usr2 is kept in the store
     //String mob_part = "Mom_Tab";
     public String mob_Id = owner_part + ":" + mob_part + ":";
 
