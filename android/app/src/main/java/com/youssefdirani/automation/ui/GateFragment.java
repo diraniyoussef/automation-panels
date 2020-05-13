@@ -9,20 +9,13 @@ import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-//import androidx.lifecycle.ViewModelProvider; //fine
-//import androidx.lifecycle.ViewModelProviders; //deprecated so replaced by the fine one
 
 import com.youssefdirani.automation.MainActivity;
 import com.youssefdirani.automation.R;
@@ -33,16 +26,32 @@ import com.youssefdirani.automation.WiFiConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+//import androidx.lifecycle.ViewModelProvider; //fine
+//import androidx.lifecycle.ViewModelProviders; //deprecated so replaced by the fine one
+
 public class GateFragment extends Fragment { //in principle, this fragment represents the charcoal humidity and temperature panel.
 
     private String message;
     private String message_header;
 
-    private SocketConnection localSocketConnection, internetSocketConnection;
+    private SocketConnection localSocketConnection = null, internetSocketConnection = null;
     private Boolean isLocal, isInternet;
 
     private MainActivity activity;
     private View root;
+
+    public void onPause() {
+        super.onPause();
+        if( localSocketConnection != null ) {
+            localSocketConnection.destroyAllSockets();
+        }
+        if( internetSocketConnection != null ) {
+            internetSocketConnection.destroyAllSockets();
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class GateFragment extends Fragment { //in principle, this fragment repre
     }
 
     private void messageServerWithWiFiCheck( SocketConnection socketConnection, boolean silent_wifi ) {
+        Log.i("Youssef", "sending message as local wifi");
         if( WiFiConnection.wiFiValid( activity.getApplicationContext(), silent_wifi, activity.toasting, isLocal ) ) {
             try {
                 Log.i("Youssef info..electr", "message is " + message);
@@ -69,6 +79,7 @@ public class GateFragment extends Fragment { //in principle, this fragment repre
     }
 
     private void messageServerThroughInternet( SocketConnection socketConnection ) {
+        Log.i("Youssef", "sending message as internet");
         try {
             Log.i("Youssef info..electr", "message is " + message);
             socketConnection.socketConnectionSetup(message);
@@ -84,7 +95,7 @@ public class GateFragment extends Fragment { //in principle, this fragment repre
         super.onResume();
         final MainActivity activity = (MainActivity) getActivity();
 
-        String panel_name = "";
+        String panel_name;
         final String panel_type = "obeying"; //either obeying or informing or empty. I do have a protection mechanism though, so it's ok if you forget it.. This variable is probably only used in ConfigPanel class.
 
         if (activity != null) {
@@ -174,7 +185,8 @@ public class GateFragment extends Fragment { //in principle, this fragment repre
                     } else {
                         activity.localInternet_toggleButton.setVisibility(View.GONE);
                     }
-                } else {
+                } else { //both checked
+                    activity.localInternet_toggleButton.setChecked(false); //meaning local. I chose Local as a convention. Nothing special.
                     activity.localInternet_toggleButton.setEnabled(true);
                     activity.localInternet_toggleButton.setVisibility(View.VISIBLE);
                 }
@@ -191,8 +203,6 @@ public class GateFragment extends Fragment { //in principle, this fragment repre
             }
 
             sendMessageAccordingToToggleButton( true );
-
-
 
             //Button refreshButton = activity.findViewById(R.id.buttonHumTemperature_refresh); //doesn't work when you go back to this fragment. And this is logical since the refresh button belongs to the fragment and not the activity
             Button refreshButton = root.findViewById(R.id.refresh_button);
@@ -351,17 +361,30 @@ public class GateFragment extends Fragment { //in principle, this fragment repre
         if( activity.localInternet_toggleButton != null &&
                 activity.localInternet_toggleButton.getVisibility() == View.VISIBLE  &&
                 activity.localInternet_toggleButton.isEnabled() ) { //user has the choice to select whichever he desires.
+            Log.i("Youssef", "not going to happen.");
             if( !activity.localInternet_toggleButton.isChecked() ) {
                 messageServerWithWiFiCheck( localSocketConnection, silentWiFi );
             } else {
                 messageServerThroughInternet( internetSocketConnection );
             }
-        } else { //isLocal and isInternet cannot be both true. localInternet_toggleButton won't be null.
+        } else { //isLocal and isInternet cannot be both false. localInternet_toggleButton won't be null.
             //BTW, must keep them loose, i.e. don't use "else if" because user might go to network configuration and unselect both.
-            if( isLocal ) {
+            //I tested it, and we enter here only when Local and Internet are both checked.
+            /*
+            if( activity.localInternet_toggleButton == null ) {
+                Log.i("Youssef", "not going to happen. it's null");
+            }
+            if( activity.localInternet_toggleButton.getVisibility() != View.VISIBLE ) {
+                Log.i("Youssef", "not going to happen. it's not visible");
+            }
+            if( !activity.localInternet_toggleButton.isEnabled() ) { //this is the reason why we enter here
+                Log.i("Youssef", "not going to happen. it's disabled");
+            }
+             */
+            if( isLocal && activity.localInternet_toggleButton != null && !activity.localInternet_toggleButton.isChecked() ) {
                 messageServerWithWiFiCheck( localSocketConnection, silentWiFi );
             }
-            if( isInternet ) {
+            if( isInternet && activity.localInternet_toggleButton != null && activity.localInternet_toggleButton.isChecked() ) {
                 messageServerThroughInternet( internetSocketConnection );
             }
         }

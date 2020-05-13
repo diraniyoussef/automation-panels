@@ -1,20 +1,6 @@
 package com.youssefdirani.automation.ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.youssefdirani.automation.R;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,14 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-//import androidx.lifecycle.ViewModelProvider; //fine
-//import androidx.lifecycle.ViewModelProviders; //deprecated so replaced by the fine one
 
 import com.youssefdirani.automation.MainActivity;
 import com.youssefdirani.automation.R;
@@ -37,8 +16,11 @@ import com.youssefdirani.automation.ServerConfig;
 import com.youssefdirani.automation.SocketConnection;
 import com.youssefdirani.automation.WiFiConnection;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+//import androidx.lifecycle.ViewModelProvider; //fine
+//import androidx.lifecycle.ViewModelProviders; //deprecated so replaced by the fine one
 //import androidx.lifecycle.ViewModelProvider; //fine
 //import androidx.lifecycle.ViewModelProviders; //deprecated so replaced by the fine one
 
@@ -51,6 +33,16 @@ public class TempHumFragment extends Fragment { //in principle, this fragment re
 
     private MainActivity activity;
     private View root;
+
+    public void onPause() {
+        super.onPause();
+        if( localSocketConnection != null ) {
+            localSocketConnection.destroyAllSockets();
+        }
+        if( internetSocketConnection != null ) {
+            internetSocketConnection.destroyAllSockets();
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +79,7 @@ public class TempHumFragment extends Fragment { //in principle, this fragment re
         super.onResume();
         final MainActivity activity = (MainActivity) getActivity();
 
-        String panel_name = "";
+        String panel_name;
         final String panel_type = "informing"; //either obeying or informing or empty. I do have a protection mechanism though, so it's ok if you forget it.. This variable is probably only used in ConfigPanel class.
 
         if (activity != null) {
@@ -163,6 +155,7 @@ public class TempHumFragment extends Fragment { //in principle, this fragment re
                         activity.localInternet_toggleButton.setVisibility(View.GONE);
                     }
                 } else {
+                    activity.localInternet_toggleButton.setChecked(false); //meaning local. I chose Local as a convention. Nothing special.
                     activity.localInternet_toggleButton.setEnabled(true);
                     activity.localInternet_toggleButton.setVisibility(View.VISIBLE);
                 }
@@ -211,10 +204,10 @@ public class TempHumFragment extends Fragment { //in principle, this fragment re
             }
         } else { //isLocal and isInternet cannot be both true. localInternet_toggleButton won't be null.
             //BTW, must keep them loose, i.e. don't use "else if" because user might go to network configuration and unselect both.
-            if( isLocal ) {
+            if( isLocal && activity.localInternet_toggleButton != null && !activity.localInternet_toggleButton.isChecked() ) {
                 messageServerWithWiFiCheck( localSocketConnection, silentWiFi );
             }
-            if( isInternet ) {
+            if( isInternet && activity.localInternet_toggleButton != null && activity.localInternet_toggleButton.isChecked() ) {
                 messageServerThroughInternet( internetSocketConnection );
             }
         }

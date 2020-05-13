@@ -93,8 +93,8 @@ public class SocketConnection { //some methods are not static in this class, thi
                     + " For panel " + selectedServerConfig.getPanelName());
         }
     }
-/*
-    void destroyAllSockets() {
+
+    public void destroyAllSockets() {
         communication.delayToManipulateSockets.cancelTimer(); //usually there is a 2 minutes timer to manipulate the sockets, this should be cancelled.
         //it's like         communication.delayToManipulateSockets.cancelTimer();
         communication.destroySocketTimer.cancelTimer(); //there might be one socket waiting to be destroyed after sometime, so I will cancel the timer and close the socket
@@ -103,7 +103,7 @@ public class SocketConnection { //some methods are not static in this class, thi
         destroySocket(1);
         active_client_index = -1;
     }
-*/
+
     boolean createNewSocket(int client_index_param) {
         //createSocketAsyncTaskInstance.execute();
         socketCreationSuccessful = true;

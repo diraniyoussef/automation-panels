@@ -99,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
         //Log.i("MainAct...", "Youssef/ Entering resume");//clearly only entered once even when navigating through fragment layouts
 
         localInternet_toggleButton = findViewById(R.id.toggleButton_internet_local);
-        updateConnectionMeans( localInternet_toggleButton );
+        updateToggleButtonShape( localInternet_toggleButton );
         localInternet_toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("MainAct", "Youssef/ inside tb setonclickListener");
-                updateConnectionMeans( localInternet_toggleButton );
+                updateToggleButtonShape( localInternet_toggleButton );
             }
         });
         /*
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void updateConnectionMeans( ToggleButton tb ) {
+    private void updateToggleButtonShape( ToggleButton tb ) {
         if( tb == null ) return; //just protection
         if(tb.isChecked()) { //internet
             tb.setTextColor( getTextColorPrimary() );
@@ -196,6 +196,11 @@ public class MainActivity extends AppCompatActivity {
      //   return false; //I added this
     }
 
-
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+        super.onBackPressed();  // optional depending on your needs
+    }
 }
 
